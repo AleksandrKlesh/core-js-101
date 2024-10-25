@@ -202,8 +202,12 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  const top = `┌${'─'.repeat(width - 2)}┐\n`;
+  const middle = `│${' '.repeat(width - 2)}│\n`;
+  const bottom = `└${'─'.repeat(width - 2)}┘\n`;
+  const str = `${top}${middle.repeat(height - 2)}${bottom}`;
+  return str;
 }
 
 
@@ -240,8 +244,11 @@ function encodeToRot13(/* str */) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+function isString(value) {
+  if (typeof value === 'string' || value instanceof String) {
+    return true;
+  }
+  return false;
 }
 
 
@@ -269,10 +276,31 @@ function isString(/* value */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const dictionary = {
+    A: 0,
+    J: 10,
+    Q: 11,
+    K: 12,
+    '♣': 0,
+    '♦': 1,
+    '♥': 2,
+    '♠': 3,
+  };
+  let row = 0;
+  let column = 0;
+  if (value.length === 3) {
+    column = Number(value.slice(0, 2)) - 1;
+    row = dictionary[value.charAt(2)];
+  } else if (Number(value.charAt(0))) {
+    column = Number(value.charAt(0)) - 1;
+    row = dictionary[value.charAt(1)];
+  } else {
+    column = dictionary[value.charAt(0)];
+    row = dictionary[value.charAt(1)];
+  }
+  return column + (row * 13);
 }
-
 
 module.exports = {
   concatenateStrings,
